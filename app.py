@@ -30,8 +30,6 @@ def predict():
             load_data_2023(), main_rank, advanced_rank, category, gender, is_jee_advanced
         )
 
-        #filtration left
-        
         # Predict colleges for 2024
         results_2024 = predict_colleges_2024(
             load_data_2024(), main_rank, advanced_rank, category, gender, is_jee_advanced
