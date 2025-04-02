@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Predictor</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> -->
+</head>
+<body>
+    <h2>College Predictor</h2>
+    <form id="predictForm">
+        <label for="main_rank">JEE Mains Rank:</label>
+        <input type="number" name="main_rank" id="main_rank" oninput="toggleInput('main_rank', 'percentile')"><br>
+        
+        <label for="percentile">JEE Mains Percentile:</label>
+        <input type="text" name="percentile" id="percentile" oninput="toggleInput('percentile', 'main_rank')"><br>
+
+        <script>
+            function toggleInput(activeInputId, otherInputId) {
+                const activeInput = document.getElementById(activeInputId);
+                const otherInput = document.getElementById(otherInputId);
+
+                if (activeInput.value.trim() !== "") {
+                    otherInput.disabled = true;
+                    if(otherInputId == "percentile"){
+                        otherInput.setAttribute("placeholder", "Clear rank to type here");
+                    }else{
+                        otherInput.setAttribute("placeholder", "Clear percentile to type here");
+                    }
+                } else {
+                    otherInput.disabled = false;
+                    otherInput.removeAttribute("placeholder");
+                }
+            }
+        </script>
+        
+        <label>Have you taken JEE Advanced?</label>
+        <select id="is_jee_advanced" name="is_jee_advanced" onchange="toggleAdvancedRankField()">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select><br>
+
+        <div id="advancedRankField" style="display: none;">
+            <label>JEE Advanced Rank:</label>
+            <input type="number" name="advanced_rank" id="advanced_rank"><br>
+        </div>
+
+        <script>
+            function toggleAdvancedRankField() {
+            const isAdvanced = document.getElementById("is_jee_advanced").value;
+            const advancedRankField = document.getElementById("advancedRankField");
+            advancedRankField.style.display = isAdvanced === "yes" ? "block" : "none";
+            }
+        </script>
+
+        <label for="category">Category:</label>
+        <select name="category" id="category" required>
+            <option value="OPEN">OPEN</option>
+            <option value="EWS">EWS</option>
+            <option value="OBC-NCL">OBC-NCL</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="OPEN (PwD)">OPEN (PwD)</option>
+            <option value="OBC-NCL (PwD)">OBC-NCL (PwD)</option>
+            <option value="SC (PwD)">SC (PwD)</option>
+            <option value="EWS (PwD)">EWS (PwD)</option>
+            <option value="ST (PwD)">ST (PwD)</option>
+        </select><br>
+
+        <label>Gender:</label>
+        <select name="gender" id="gender">
+            <option value="Gender-Neutral">Gender-Neutral</option>
+            <option value="Female-only (including Supernumerary)">Female-only  (including Supernumerary)</option>
+        </select><br>
+
+        <button type="submit">Predict Colleges</button>
+    </form>
+
+    <p id="loading" style="display: none;">Processing... Please wait.</p>
+
+    <div id="filters" style="display: none;">
+        <h3>Filters</h3>
+        <label for="quotaFilter">Quota:</label>
+        <select id="quotaFilter">
+            <option value="">All</option>
+            <option value="AI">AI</option>
+            <option value="HS">HS</option>
+            <option value="OS">OS</option>
+            <option value="LA">LA</option>
+            <option value="JK">JK</option>
+            <option value="GO">GO</option>
+        </select><br>
+
+        <label for="instituteFilter">Institute:</label>
+        <select id="instituteFilter">
+            <option value="">All</option>
+            <option value="IIT">IITs</option>
+            <option value="NIT">NITs</option>
+            <option value="IIIT">IIITs</option>
+            <option value="Others">Others</option>
+        </select>
+        <input type="text" name="instituteFilterByName" id="instituteFilterByName" placeholder="Enter institute name">
+        <script>
+            let instituteFilterTimeout;
+            document.getElementById("instituteFilterByName").addEventListener("input", function() {
+            clearTimeout(instituteFilterTimeout); // Clear the previous timeout
+            instituteFilterTimeout = setTimeout(() => {
+                applyFilters("instituteFilterByName"); // Call applyFilters after a delay
+            }, 1500); // Wait for 1500ms before calling applyFilters
+            });
+        </script>
+        <br>
+
+        <label for="programFilter">Academic Program:</label>
+        <input type="text" name="programFilter" id="programFilter" placeholder="Enter program name"><br>
+        <script>
+            let programFilterTimeout;
+            document.getElementById("programFilter").addEventListener("input", function() {
+                clearTimeout(programFilterTimeout); // Clear the previous timeout
+                programFilterTimeout = setTimeout(() => {
+                    applyFilters("programFilter"); // Call applyFilters after a delay
+                }, 1500); // Wait for 1500ms before calling applyFilters
+            });
+        </script>
+
+        <label for="roundFilter">Round:</label>
+        <select id="roundFilter">
+            <option value="">All</option>
+            <option value="1">Round 1</option>
+            <option value="2">Round 2</option>
+            <option value="3">Round 3</option>
+            <option value="4">Round 4</option>
+            <option value="5">Round 5</option>
+        </select><br>
+    </div>
+
+    <div id="results" style="display: none;">
+        <h2>Mains Rank</h2>
+        <div id="main_rank_show"></div>
+
+        <div id="advDiv" style="display: none;">
+            <h2>Advanced Rank</h2>
+            <div id="advanced_rank_show"></div>
+        </div>
+
+        <h2>Results 2023</h2>
+        <div id="results_2023"></div>
+
+        <h2>Results 2024</h2>
+        <div id="results_2024"></div>
+    </div>
+
+    <script>
+        document.getElementById("predictForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            document.getElementById("loading").style.display = "block"; // Show loading message
+
+            // Collect form data
+            let formData = {
+                main_rank: document.getElementById("main_rank").value,
+                advanced_rank: document.getElementById("advanced_rank").value,
+                category: document.getElementById("category").value,
+                gender: document.getElementById("gender").value,
+                percentile: document.getElementById("percentile").value,
+                is_jee_advanced: document.getElementById("is_jee_advanced").value
+            };
+
+            // Send data to Flask backend
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none"; // Hide loading message
+                document.getElementById("results_2023").innerHTML = data.results_2023;
+                document.getElementById("results_2024").innerHTML = data.results_2024;
+                document.getElementById("main_rank_show").innerHTML = data.main_rank;
+                document.getElementById("advanced_rank_show").innerHTML = data.advanced_rank;
+                document.getElementById("advDiv").style.display = data.advanced_rank ? "block" : "none"; // Show/hide advanced rank div
+                document.getElementById("results").style.display = "block"; // Show results
+                document.getElementById("filters").style.display = "block"; // Show filters
+                setTimeout(() => {
+                    addFilterListeners(); // Add filtering functionality
+                }, 1000);
+            })
+            .catch(error => {
+                document.getElementById("loading").style.display = "none"; // Hide loading message
+                alert("Error: " + error);
+            });
+        });
+
+        // Add filtering functionality
+        function addFilterListeners() {
+            const quotaFilter = document.getElementById("quotaFilter");
+            const instituteFilter = document.getElementById("instituteFilter");
+            const programFilter = document.getElementById("programFilter");
+            const roundFilter = document.getElementById("roundFilter");
+
+            quotaFilter.addEventListener("change", () => applyFilters("quotaFilter"));
+            instituteFilter.addEventListener("change", () => applyFilters("instituteFilter"));
+            programFilter.addEventListener("input", () => applyFilters("programFilter"));
+            roundFilter.addEventListener("change", () => applyFilters("roundFilter"));
+        }
+
+        // Apply filters to the results
+        function applyFilters(initiator) {
+            const quotaValue = document.getElementById("quotaFilter").value.toLowerCase();
+            const instituteValue = document.getElementById("instituteFilter").value.toLowerCase();
+            let instituteFilterByNameValue = document.getElementById("instituteFilterByName").value.toLowerCase();
+            const programValue = document.getElementById("programFilter").value.toLowerCase();
+            const roundValue = document.getElementById("roundFilter").value;
+
+            if(initiator==="instituteFilter"){
+                document.getElementById("instituteFilterByName").value = ""; // Clear the institute name filter when changing the dropdown
+                instituteFilterByNameValue = ""; // Reset the variable to ensure correct filtering
+            }
+
+            const results2023 = document.getElementById("results_2023");
+            const results2024 = document.getElementById("results_2024");
+
+            [results2023, results2024].forEach(resultsDiv => {
+                const rows = resultsDiv.querySelectorAll("tbody tr");
+
+                rows.forEach(row => {
+                    const institute = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+                    const quota = row.querySelector("td:nth-child(5)").textContent.toLowerCase();
+                    const program = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
+                    const round = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
+                    let matchesInstitute = true;
+
+                    // Handle institute-specific filtering
+                    if (instituteValue === ""){
+                        matchesInstitute = true; // Show all rows if no institute filter is selected
+                    }else if (instituteValue == "nit") {
+                        matchesInstitute = institute.includes("national institute of technology");
+                    } else if (instituteValue === "iit") {
+                        matchesInstitute = institute.includes("indian institute of technology");
+                    } else if (instituteValue === "iiit") {
+                        matchesInstitute = institute.includes("indian institute of information technology");
+                    } else if (instituteValue === "others") {
+                        matchesInstitute = !institute.includes("national institute of technology") && !institute.includes("indian institute of technology") && !institute.includes("indian institute of information technology");
+                    }
+
+                    const matchesQuota = !quotaValue || quota === quotaValue;
+                    const matchesInstituteName = !instituteFilterByNameValue || institute.includes(instituteFilterByNameValue);
+                    const matchesProgram = !programValue || program.includes(programValue);
+                    const matchesRound = !roundValue || round === roundValue;
+
+                    if (matchesQuota && matchesInstitute && matchesProgram && matchesRound && matchesInstituteName) {
+                        row.style.display = ""; // Show row
+                    } else {
+                        row.style.display = "none"; // Hide row
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,10 @@
 from college_predictor_2023 import load_data as load_data_2023, predict_colleges as predict_colleges_2023
 from college_predictor_2024 import load_data as load_data_2024, predict_colleges as predict_colleges_2024
 
+def percentile_to_rank(percentile):
+    return int((100-percentile)*13716)
+
+
 def collect_inputs():
     """Collect user inputs for prediction."""
     print("Welcome to the College Predictor!")

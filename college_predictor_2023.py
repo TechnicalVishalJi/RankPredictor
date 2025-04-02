@@ -32,13 +32,17 @@ def predict_colleges(data, main_rank, advanced_rank, category, gender, is_jee_ad
                 (data['Gender'] == gender) &
                 (data['Closing Rank'] >= advanced_rank)
             ]
+            iit_data['Opening Rank'] = iit_data['Opening Rank'].astype(int)
+            iit_data['Closing Rank'] = iit_data['Closing Rank'].astype(int)
             # Filter other colleges using JEE Main rank
             other_colleges_data = data[
                 (~data['Institute'].str.contains("Indian Institute of Technology")) &
-                (data['Seat Type'] == category) &
+                (data['Seat Type'].str.contains(category)) &
                 (data['Gender'] == gender) &
                 (data['Closing Rank'] >= main_rank)
             ]
+            other_colleges_data['Opening Rank'] = other_colleges_data['Opening Rank'].astype(int)
+            other_colleges_data['Closing Rank'] = other_colleges_data['Closing Rank'].astype(int)
             return pd.concat([iit_data, other_colleges_data], ignore_index=True)
         else:
             # Only consider JEE Main rank for all colleges
@@ -47,7 +51,9 @@ def predict_colleges(data, main_rank, advanced_rank, category, gender, is_jee_ad
                 (data['Gender'] == gender) &
                 (data['Closing Rank'] >= main_rank)
             ]
-            return filtered_data[['Institute', 'Academic Program Name', 'Round', 'Opening Rank', 'Closing Rank']]
+            filtered_data['Opening Rank'] = filtered_data['Opening Rank'].astype(int)
+            filtered_data['Closing Rank'] = filtered_data['Closing Rank'].astype(int)
+            return filtered_data[['Institute', 'Academic Program Name', 'Round', 'Quota', 'Seat Type', "Gender", 'Opening Rank', 'Closing Rank']]
     except Exception as e:
         print(f"Error in predict_colleges: {e}")
         return pd.DataFrame()  # Return an empty DataFrame on error
