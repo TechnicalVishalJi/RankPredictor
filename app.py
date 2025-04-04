@@ -26,9 +26,9 @@ def predict():
             main_rank = percentile_to_rank(main_perc)
 
         # Predict colleges for 2023
-        results_2023 = predict_colleges_2023(
-            load_data_2023(), main_rank, advanced_rank, category, gender, is_jee_advanced
-        )
+        # results_2023 = predict_colleges_2023(
+        #     load_data_2023(), main_rank, advanced_rank, category, gender, is_jee_advanced
+        # )
 
         # Predict colleges for 2024
         results_2024 = predict_colleges_2024(
@@ -36,12 +36,12 @@ def predict():
         )
 
         # Convert to HTML tables
-        results_2023_html = results_2023.to_html(classes='table table-bordered') if not results_2023.empty else "No results for 2023."
-        results_2024_html = results_2024.to_html(classes='table table-bordered') if not results_2024.empty else "No results for 2024."
+        # results_2023_html = results_2023.to_html(classes='table table-bordered') if not results_2023.empty else "No results for 2023."
+        results_2024_json = results_2024.to_dict(orient="records") if not results_2024.empty else "No results for 2024."
 
         return jsonify({
-            "results_2023": results_2023_html,
-            "results_2024": results_2024_html,
+            # "results_2023": results_2023_html,
+            "results_2024": results_2024_json,
             "main_rank": main_rank,
             "advanced_rank": advanced_rank,
         })

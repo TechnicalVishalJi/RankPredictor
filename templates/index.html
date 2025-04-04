@@ -4,164 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Predictor</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <link rel="stylesheet" href="../static/style.css"> -->
 </head>
 <body>
-    <h2>College Predictor</h2>
-    <form id="predictForm">
-        <label for="main_rank">JEE Mains Rank:</label>
-        <input type="number" name="main_rank" id="main_rank" oninput="toggleInput('main_rank', 'percentile')"><br>
-        
-        <label for="percentile">JEE Mains Percentile:</label>
-        <input type="text" name="percentile" id="percentile" oninput="toggleInput('percentile', 'main_rank')"><br>
+    <nav id="navbar">
+        <ul>
+            <li><a href="#" onclick="loadContent('home')">Home</a></li>
+            <li><a href="#" onclick="loadContent('about')">About US</a></li>
+            <li><a href="#" onclick="loadContent('contact')">Contact Us</a></li>
+        </ul>
+    </nav>
 
-        <script>
-            function toggleInput(activeInputId, otherInputId) {
-                const activeInput = document.getElementById(activeInputId);
-                const otherInput = document.getElementById(otherInputId);
-
-                if (activeInput.value.trim() !== "") {
-                    otherInput.disabled = true;
-                    if(otherInputId == "percentile"){
-                        otherInput.setAttribute("placeholder", "Clear rank to type here");
-                    }else{
-                        otherInput.setAttribute("placeholder", "Clear percentile to type here");
-                    }
-                } else {
-                    otherInput.disabled = false;
-                    otherInput.removeAttribute("placeholder");
-                }
-            }
-        </script>
-        
-        <label>Have you taken JEE Advanced?</label>
-        <select id="is_jee_advanced" name="is_jee_advanced" onchange="toggleAdvancedRankField()">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-        </select><br>
-
-        <div id="advancedRankField" style="display: none;">
-            <label>JEE Advanced Rank:</label>
-            <input type="number" name="advanced_rank" id="advanced_rank"><br>
+    <section class="main-content">
+        <div class="about" style="display: none;">
+            <h1>About Us</h1>
+            <p>We are dedicated to helping students find the right college based on their JEE ranks.</p>
         </div>
+        <div class="contact" style="display: none;">
+            <h1>Contact Us</h1>
+            <p>If you have any questions, feel free to reach out!</p>
+            <form id="contactForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br>
 
-        <script>
-            function toggleAdvancedRankField() {
-            const isAdvanced = document.getElementById("is_jee_advanced").value;
-            const advancedRankField = document.getElementById("advancedRankField");
-            advancedRankField.style.display = isAdvanced === "yes" ? "block" : "none";
-            }
-        </script>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br>
 
-        <label for="category">Category:</label>
-        <select name="category" id="category" required>
-            <option value="OPEN">OPEN</option>
-            <option value="EWS">EWS</option>
-            <option value="OBC-NCL">OBC-NCL</option>
-            <option value="SC">SC</option>
-            <option value="ST">ST</option>
-            <option value="OPEN (PwD)">OPEN (PwD)</option>
-            <option value="OBC-NCL (PwD)">OBC-NCL (PwD)</option>
-            <option value="SC (PwD)">SC (PwD)</option>
-            <option value="EWS (PwD)">EWS (PwD)</option>
-            <option value="ST (PwD)">ST (PwD)</option>
-        </select><br>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea><br>
 
-        <label>Gender:</label>
-        <select name="gender" id="gender">
-            <option value="Gender-Neutral">Gender-Neutral</option>
-            <option value="Female-only (including Supernumerary)">Female-only  (including Supernumerary)</option>
-        </select><br>
-
-        <button type="submit">Predict Colleges</button>
-    </form>
-
-    <p id="loading" style="display: none;">Processing... Please wait.</p>
-
-    <div id="filters" style="display: none;">
-        <h3>Filters</h3>
-        <label for="quotaFilter">Quota:</label>
-        <select id="quotaFilter">
-            <option value="">All</option>
-            <option value="AI">AI</option>
-            <option value="HS">HS</option>
-            <option value="OS">OS</option>
-            <option value="LA">LA</option>
-            <option value="JK">JK</option>
-            <option value="GO">GO</option>
-        </select><br>
-
-        <label for="instituteFilter">Institute:</label>
-        <select id="instituteFilter">
-            <option value="">All</option>
-            <option value="IIT">IITs</option>
-            <option value="NIT">NITs</option>
-            <option value="IIIT">IIITs</option>
-            <option value="Others">Others</option>
-        </select>
-        <input type="text" name="instituteFilterByName" id="instituteFilterByName" placeholder="Enter institute name">
-        <script>
-            let instituteFilterTimeout;
-            document.getElementById("instituteFilterByName").addEventListener("input", function() {
-            clearTimeout(instituteFilterTimeout); // Clear the previous timeout
-            instituteFilterTimeout = setTimeout(() => {
-                applyFilters("instituteFilterByName"); // Call applyFilters after a delay
-            }, 1500); // Wait for 1500ms before calling applyFilters
-            });
-        </script>
-        <br>
-
-        <label for="programFilter">Academic Program:</label>
-        <input type="text" name="programFilter" id="programFilter" placeholder="Enter program name"><br>
-        <script>
-            let programFilterTimeout;
-            document.getElementById("programFilter").addEventListener("input", function() {
-                clearTimeout(programFilterTimeout); // Clear the previous timeout
-                programFilterTimeout = setTimeout(() => {
-                    applyFilters("programFilter"); // Call applyFilters after a delay
-                }, 1500); // Wait for 1500ms before calling applyFilters
-            });
-        </script>
-
-        <label for="roundFilter">Round:</label>
-        <select id="roundFilter">
-            <option value="">All</option>
-            <option value="1">Round 1</option>
-            <option value="2">Round 2</option>
-            <option value="3">Round 3</option>
-            <option value="4">Round 4</option>
-            <option value="5">Round 5</option>
-        </select><br>
-    </div>
-
-    <div id="results" style="display: none;">
-        <h2>Mains Rank</h2>
-        <div id="main_rank_show"></div>
-
-        <div id="advDiv" style="display: none;">
-            <h2>Advanced Rank</h2>
-            <div id="advanced_rank_show"></div>
+                <button type="submit">Send</button>
+            </form>
         </div>
+        <div class="college-predictor">
+            <div class="intro" style="display: none;">
+                <p class="subtitle">
+                    No Hidden Charges, 100% Free
+                </p>
+                <h1 class="title">Early Rank<br>and College<br>Predictor 2025</h1>
+                <p class="description">
+                    Get an early prediction of your JEE Mains<br>
+                    and Advanced ranks and the colleges you can get into.
+                </p>
+                <button id="startPrediction">Check Prediction</button>
+            </div>
+            <div class="predictor">
+                <div class="outer" style="display: none;">
+                    <form id="predictForm">
+                        <div class="form-group">
+                            <label for="main_rank">JEE Mains Rank:</label>
+                            <input type="number" name="main_rank" id="main_rank" oninput="toggleInput('main_rank', 'percentile')">
+                       
+                            <label for="percentile">JEE Mains Percentile:</label>
+                            <input type="text" name="percentile" id="percentile" oninput="toggleInput('percentile', 'main_rank')" >
+                        </div>
+    
+                        <script>
+                            function toggleInput(activeInputId, otherInputId) {
+                                const activeInput = document.getElementById(activeInputId);
+                                const otherInput = document.getElementById(otherInputId);
+                
+                                if (activeInput.value.trim() !== "") {
+                                    otherInput.disabled = true;
+                                    if(otherInputId == "percentile"){
+                                        otherInput.setAttribute("placeholder", "Clear rank to type here");
+                                    }else{
+                                        otherInput.setAttribute("placeholder", "Clear percentile to type here");
+                                    }
+                                } else {
+                                    otherInput.disabled = false;
+                                    otherInput.removeAttribute("placeholder");
+                                }
+                            }
+                        </script>
+                        
+                        <div class="form-group">
+                            <label>Have you taken JEE Advanced?</label>
+                            <select id="is_jee_advanced" name="is_jee_advanced" onchange="toggleAdvancedRankField()">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                            <div id="advancedRankField" style="display: none;">
+                                <label>JEE Advanced Rank:</label>
+                                <input type="number" name="advanced_rank" id="advanced_rank"><br>
+                            </div>
+                        </div>
+                
+                
+                        <script>
+                            function toggleAdvancedRankField() {
+                            const isAdvanced = document.getElementById("is_jee_advanced").value;
+                            const advancedRankField = document.getElementById("advancedRankField");
+                            advancedRankField.style.display = isAdvanced === "yes" ? "flex" : "none";
+                            }
+                        </script>
+                
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <select name="category" id="category" required>
+                                <option value="OPEN">OPEN</option>
+                                <option value="EWS">EWS</option>
+                                <option value="OBC-NCL">OBC-NCL</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OPEN (PwD)">OPEN (PwD)</option>
+                                <option value="OBC-NCL (PwD)">OBC-NCL (PwD)</option>
+                                <option value="SC (PwD)">SC (PwD)</option>
+                                <option value="EWS (PwD)">EWS (PwD)</option>
+                                <option value="ST (PwD)">ST (PwD)</option>
+                            </select>
+    
+                            <label>Gender:</label>
+                            <select name="gender" id="gender">
+                                <option value="Gender-Neutral">Gender-Neutral</option>
+                                <option value="Female-only (including Supernumerary)">Female-only (including Supernumerary)</option>
+                            </select>
+                        </div>
+                
+                        <button type="submit">Predict Colleges</button>
+                    </form>
 
-        <h2>Results 2023</h2>
-        <div id="results_2023"></div>
+                    <div id="resultsPanel" style="display: none; position: relative; margin: 0 20px; height: 90vh;">
+                        <img src="https://res.cloudinary.com/derp0chbp/image/upload/v1743756428/loadingfinal_k47eda.gif" id="loading" style="display:none;width: 0;height: 0;">
+                    
+                        <div class="top-row">
+                            <div id="filters">
+                                <div class="filter-row">
+                                    <div class="filter-group">
+                                        <label for="quotaFilter">Quota:</label>
+                                        <select id="quotaFilter">
+                                            <option value="">All</option>
+                                            <option value="AI">AI</option>
+                                            <option value="HS">HS</option>
+                                            <option value="OS">OS</option>
+                                            <option value="LA">LA</option>
+                                            <option value="JK">JK</option>
+                                            <option value="GO">GO</option>
+                                        </select>
+                                    </div>
+                            
+                                    <div class="filter-group">
+                                        <label for="instituteFilter">Institute:</label>
+                                        <select id="instituteFilter">
+                                            <option value="">All</option>
+                                            <option value="IIT">IITs</option>
+                                            <option value="NIT">NITs</option>
+                                            <option value="IIIT">IIITs</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" name="instituteFilterByName" id="instituteFilterByName" placeholder="Enter institute name">
+                                        <script>
+                                            let instituteFilterTimeout;
+                                            document.getElementById("instituteFilterByName").addEventListener("input", function() {
+                                            clearTimeout(instituteFilterTimeout); // Clear the previous timeout
+                                            instituteFilterTimeout = setTimeout(() => {
+                                                applyFilters("instituteFilterByName"); // Call applyFilters after a delay
+                                            }, 1500); // Wait for 1500ms before calling applyFilters
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+    
+                                <div class="filter-row">                                
+                                    <div class="filter-group">
+                                        <label for="programFilter">Academic Program:</label>
+                                        <input type="text" name="programFilter" id="programFilter" placeholder="Enter program name">
+                                    </div>
+                                    <script>
+                                        let programFilterTimeout;
+                                        document.getElementById("programFilter").addEventListener("input", function() {
+                                            clearTimeout(programFilterTimeout); // Clear the previous timeout
+                                            programFilterTimeout = setTimeout(() => {
+                                                applyFilters("programFilter"); // Call applyFilters after a delay
+                                            }, 1500); // Wait for 1500ms before calling applyFilters
+                                        });
+                                    </script>
+                            
+                                    <div class="filter-group">
+                                        <label for="roundFilter">Round:</label>
+                                        <select id="roundFilter">
+                                            <option value="">All</option>
+                                            <option value="1">Round 1</option>
+                                            <option value="2">Round 2</option>
+                                            <option value="3">Round 3</option>
+                                            <option value="4">Round 4</option>
+                                            <option value="5">Round 5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="ranks">
+                                <div id="mainRank">
+                                    <h2>Mains Rank</h2>
+                                    <div id="main_rank_show"></div>
+                                </div>
+                        
+                                <div id="advDiv" style="display: none;">
+                                    <h2>Advanced Rank</h2>
+                                    <div id="advanced_rank_show"></div>
+                                </div>
+                            </div>
+                        </div>
 
-        <h2>Results 2024</h2>
-        <div id="results_2024"></div>
-    </div>
+                    
+                        <div id="results">
+                            <div id="results_2024">
+                                <table id="results2024Table">
+                                    <thead></thead>
+                                    <tbody></tbody>
+                                </table>
+                                <button class="load_more_button" onclick="loadMoreRows()">Load More...</button>
+                                <div class="no-result" style="display: none; margin: 10% 0 0 50%; transform: translate(-10%, -50%);">No colleges found</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js" integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ url_for('static', filename='anim.js') }}">
+    </script>
+    <!-- <script src="../static/anim.js"></script> -->
     <script>
+        let results = []; // Store all rows of data
+        let filteredResults = []; // Store filtered rows of data
+        let currentIndex = 0; // Track the current index for pagination
+        const rowsPerPage = 50; // Number of rows to load per click
+
+
+        function loadContent(section) {
+            const home = document.querySelector('.college-predictor');
+            const aboutSection = document.querySelector('.about');
+            const contactSection = document.querySelector(".contact");
+
+            if (section === 'home') {
+                home.style.display = "block"; // Show home content
+                aboutSection.style.display = "none"; // Hide about content
+                contactSection.style.display = "none";
+            } else if (section === 'about') {
+                home.style.display = "none"; // Show home content
+                aboutSection.style.display = "block"; // Hide about content
+                contactSection.style.display = "none";
+            } else if (section === 'contact') {
+                home.style.display = "none"; // Show home content
+                aboutSection.style.display = "none"; // Hide about content
+                contactSection.style.display = "block"; // Show contact content
+            }
+        }
+
         document.getElementById("predictForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent default form submission
+            const mainRankInput = document.getElementById("main_rank").value;
+            const percentileInput = document.getElementById("percentile").value;
+            if(mainRankInput === "" && percentileInput === "") {
+                alert("Please enter either JEE Mains Rank or Percentile.");
+                return;
+            }
             document.getElementById("loading").style.display = "block"; // Show loading message
+            gsap.timeline()
+            .to(".outer form", { duration: 0.3, width:0, height:0,  ease: "power4.out",
+                    onComplete: () => {
+                        document.querySelector(".outer form").style.display = "none";
+                    }
+                }
+            )
+            .to("#loading", {duration: 1, width: "400px", height: "300px", ease: "power4.out"});
 
             // Collect form data
             let formData = {
-                main_rank: document.getElementById("main_rank").value,
+                main_rank: mainRankInput,
                 advanced_rank: document.getElementById("advanced_rank").value,
                 category: document.getElementById("category").value,
                 gender: document.getElementById("gender").value,
-                percentile: document.getElementById("percentile").value,
+                percentile: percentileInput,
                 is_jee_advanced: document.getElementById("is_jee_advanced").value
             };
 
@@ -175,14 +294,27 @@
             })
             .then(response => response.json())
             .then(data => {
+                gsap.to(".outer", { duration: 1.5,y: "-=155px", width: "100vw", height: "100vh", ease: "power2.out" });
                 document.getElementById("loading").style.display = "none"; // Hide loading message
-                document.getElementById("results_2023").innerHTML = data.results_2023;
-                document.getElementById("results_2024").innerHTML = data.results_2024;
+
+                // document.getElementById("results_2024").innerHTML = data.results_2024;
+
+                results = data.results_2024; // Store the results
+                filteredResults = results; // Initialize filtered results
+                
+                if(results == "No results for 2024."){
+                    results = []; // Clear results
+                    filteredResults = []; // Clear filtered results
+                    document.querySelector("#results .no-result").style.display = "block"; // Show no result message
+                    document.getElementsByClassName("load_more_button")[0].style.display = "none";
+                }
+                addHeaders(); // Add table headers
+
+                loadMoreRows(); // Load the first set of rows
                 document.getElementById("main_rank_show").innerHTML = data.main_rank;
                 document.getElementById("advanced_rank_show").innerHTML = data.advanced_rank;
-                document.getElementById("advDiv").style.display = data.advanced_rank ? "block" : "none"; // Show/hide advanced rank div
-                document.getElementById("results").style.display = "block"; // Show results
-                document.getElementById("filters").style.display = "block"; // Show filters
+                document.getElementById("advDiv").style.display = data.advanced_rank ? "flex" : "none"; // Show/hide advanced rank div
+                document.getElementById("resultsPanel").style.display = "block";
                 setTimeout(() => {
                     addFilterListeners(); // Add filtering functionality
                 }, 1000);
@@ -192,6 +324,75 @@
                 alert("Error: " + error);
             });
         });
+
+        function addHeaders(){
+            const tableHeader = document.querySelector("#results2024Table thead");
+            const headerRow = document.createElement("tr");
+            const headers = ["Institute", "Academic Program Name", "Round", "Quota", "Seat Type", "Gender", "Opening Rank", "Closing Rank"];
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            tableHeader.appendChild(headerRow);
+        }
+
+        // Function to load more rows into the table
+        function loadMoreRows() {
+            const tableBody = document.querySelector("#results2024Table tbody");
+            if(filteredResults.length === 0){
+                tableBody.innerHTML = ""; // Clear previous rows
+                document.querySelector("#results .no-result").style.display = "block"; // Show no result message
+                document.getElementsByClassName("load_more_button")[0].style.display = "none";
+                return;
+            }else{
+                document.querySelector("#results .no-result").style.display = "none"; // hide no result message
+                document.getElementsByClassName("load_more_button")[0].style.display = "block"; // Show the "Load More" button
+            }
+
+            if(currentIndex === 0){
+                tableBody.innerHTML = ""; // Clear previous rows
+            }
+            const endIndex = Math.min(currentIndex + rowsPerPage, filteredResults.length);
+
+            for (let i = currentIndex; i < endIndex; i++) {
+                const row = filteredResults[i];
+                const tableRow = document.createElement("tr");
+
+                let cell = document.createElement("td");
+                cell.textContent = row["Institute"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Academic Program Name"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Round"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Quota"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Seat Type"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Gender"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Opening Rank"];
+                tableRow.appendChild(cell);
+                cell = document.createElement("td");
+                cell.textContent = row["Closing Rank"];
+                tableRow.appendChild(cell);
+                tableBody.appendChild(tableRow);
+            }
+
+            currentIndex = endIndex; // Update the current index
+
+            // Hide the "Load More" button if all rows are loaded
+            if (currentIndex >= filteredResults.length) {
+                document.getElementsByClassName("load_more_button")[0].style.display = "none";
+            }
+        }
 
         // Add filtering functionality
         function addFilterListeners() {
@@ -208,28 +409,28 @@
 
         // Apply filters to the results
         function applyFilters(initiator) {
+            filteredResults = []; // Reset filtered results
+            currentIndex = 0; // Reset current index for pagination
             const quotaValue = document.getElementById("quotaFilter").value.toLowerCase();
             const instituteValue = document.getElementById("instituteFilter").value.toLowerCase();
             let instituteFilterByNameValue = document.getElementById("instituteFilterByName").value.toLowerCase();
             const programValue = document.getElementById("programFilter").value.toLowerCase();
-            const roundValue = document.getElementById("roundFilter").value;
+            const roundValue = parseInt(document.getElementById("roundFilter").value, 10);
 
             if(initiator==="instituteFilter"){
                 document.getElementById("instituteFilterByName").value = ""; // Clear the institute name filter when changing the dropdown
                 instituteFilterByNameValue = ""; // Reset the variable to ensure correct filtering
             }
 
-            const results2023 = document.getElementById("results_2023");
-            const results2024 = document.getElementById("results_2024");
+            // const results2023 = document.getElementById("results_2023");
+            // const results2024 = document.getElementById("results_2024");
 
-            [results2023, results2024].forEach(resultsDiv => {
-                const rows = resultsDiv.querySelectorAll("tbody tr");
-
-                rows.forEach(row => {
-                    const institute = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-                    const quota = row.querySelector("td:nth-child(5)").textContent.toLowerCase();
-                    const program = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
-                    const round = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
+            [results].forEach(resultsDiv => {
+                resultsDiv.forEach(row => {
+                    const institute = row["Institute"].toLowerCase();
+                    const quota = row["Quota"].toLowerCase();
+                    const program = row["Academic Program Name"].toLowerCase();
+                    const round = row["Round"];
                     let matchesInstitute = true;
 
                     // Handle institute-specific filtering
@@ -245,18 +446,17 @@
                         matchesInstitute = !institute.includes("national institute of technology") && !institute.includes("indian institute of technology") && !institute.includes("indian institute of information technology");
                     }
 
-                    const matchesQuota = !quotaValue || quota === quotaValue;
+                    const matchesQuota = !quotaValue || quota == quotaValue;
                     const matchesInstituteName = !instituteFilterByNameValue || institute.includes(instituteFilterByNameValue);
                     const matchesProgram = !programValue || program.includes(programValue);
-                    const matchesRound = !roundValue || round === roundValue;
+                    const matchesRound = !roundValue || round == roundValue;
 
                     if (matchesQuota && matchesInstitute && matchesProgram && matchesRound && matchesInstituteName) {
-                        row.style.display = ""; // Show row
-                    } else {
-                        row.style.display = "none"; // Hide row
+                        filteredResults.push(row);
                     }
                 });
             });
+            loadMoreRows(); // Load the filtered rows
         }
     </script>
 </body>

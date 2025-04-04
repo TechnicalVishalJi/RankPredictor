@@ -1,0 +1,425 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Varela+Round&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+body {
+    background-image: url("https://res.cloudinary.com/derp0chbp/image/upload/v1743737183/background_ikelzf.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    overflow: hidden;
+}
+
+#navbar {
+    overflow: hidden;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    z-index: 999;
+}
+
+#navbar ul {
+    background-color: rgba(255, 255, 255, 0.089);
+    border: 1px solid #e734ff2e;
+    backdrop-filter: blur(20px);
+    box-shadow: 3px 3px 10px rgba(252, 152, 252, 0.217);
+    border-radius: 50px;
+    list-style-type: none;
+    margin: 10px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px; /* Space between items */
+}
+
+#navbar ul li a {
+    display: block;
+    color: #555455;
+    font-family: "Varela Round", sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 10px 16px;
+    text-decoration: none;
+    position: relative; /* Required for the ::after pseudo-element */
+    transition: text-decoration-color 0.3s ease, color 0.3s ease;
+    text-decoration-color: transparent;
+}
+
+#navbar ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2.5px;
+    border-radius: 50px;
+    background-color: #E734FF;
+    transition: width 0.3s ease; /* Smooth transition */
+}
+
+#navbar ul li a:hover{
+    color: #E734FF; /* Change text color on hover */
+    &::after {
+        width: 100%; /* Expand underline on hover */
+    }
+}
+
+.intro {
+    margin-left: 110px;
+    overflow: hidden;
+    padding: 10px 10px;
+    max-height: 80vh;
+    .title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 4.5rem;
+        color: #222222;
+        margin: 0px 0 0 0px;
+    
+    }
+    
+    .subtitle {
+        font-family: "Varela Round", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #E734FF;
+        margin: 70px 0 30px 0px;
+    }
+
+    p{
+        font-family: "Varela Round", sans-serif;
+        /* font-weight: 700; */
+        font-size: 1.2rem;
+        color: #555455;
+        margin: 20px 0 20px 0px;
+    }
+
+    button {
+        background-color: #E734FF;
+        color: white;
+        font-family: "Varela Round", sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+            background-color: #d62ce0;
+            transform: scale(1.05);
+        }
+    }
+}
+
+.predictor {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    .outer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-top: 30px;
+        background: rgba(249, 202, 255, 0.162);
+        backdrop-filter: blur(30px);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        width: 70vw;
+        height: 70vh;
+        z-index: 1;
+    }
+    form {
+        height: 70vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        z-index: 1;
+    }
+
+
+}
+
+/* Styling for the form container */
+#predictForm {
+    padding: 25px 35px;
+    font-family: "Varela Round", sans-serif;
+    color: #333;
+}
+
+/* Styling for form groups */
+#predictForm .form-group {
+    margin: 10px auto 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    #advancedRankField {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        min-width: 50%;
+    }
+}
+
+/* Styling for labels */
+#predictForm label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #555455;
+    white-space: nowrap;
+}
+
+/* Styling for inputs and selects */
+#predictForm input,
+#predictForm select {
+    width: 100%;
+    max-height: fit-content;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus effect for inputs and selects */
+#predictForm input:focus,
+#predictForm select:focus {
+    border-color: #E734FF;
+    box-shadow: 0 0 8px rgba(231, 52, 255, 0.5);
+}
+
+/* Styling for the submit button */
+#predictForm button[type="submit"] {
+    background: #E734FF;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 70%;
+    margin-top: 20px;
+}
+
+/* Hover effect for the submit button */
+#predictForm button[type="submit"]:hover {
+    background: #d62ce0;
+    transform: scale(1.05);
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    #predictForm {
+        padding: 20px 25px;
+    }
+
+    #predictForm button[type="submit"] {
+        font-size: 0.9rem;
+    }
+}
+
+#results2024Table {
+    position: relative;
+    width: calc(100vw - 40px);
+    border-collapse: collapse;
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #E734FF;
+        color: white;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    td {
+        font-family: "Varela Round", sans-serif;
+        font-size: 1rem;
+        color: #555455;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(231, 52, 255, 0.1);
+    }
+
+    tr:hover {
+        background-color: rgba(231, 52, 255, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    caption {
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #222222;
+        margin-bottom: 10px;
+    }
+}
+
+#results_2024{
+    overflow-y: scroll;
+    height: 50vh; 
+    &::-webkit-scrollbar {
+        display: none; /* Hide the scrollbar */
+    }
+    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none; /*Hide scrollbar for Firefox */
+
+    button {
+        margin: 20px 0 20px 50%;
+        transform: translateX(-50%);
+        transition: all 0.3s ease;
+        padding: 10px;
+        background-color: #E734FF;
+        color: white;
+        font-family: "Varela Round", sans-serif;
+        font-weight: 700;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(231, 52, 255, 0.5);
+
+        &:hover {
+            background-color: #d62ce0;
+            transform: scale(1.05) translateX(-50%);
+        }
+    }
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between; /* Space between items in the row */
+    width: 100%;
+    height: 40%;
+    align-items: center; /* Center vertically */
+    margin-bottom: 20px; /* Space below the row */
+
+    &>div {
+        &:nth-child(1) {
+            width: 40%;
+        }
+    
+        &:nth-child(2) {
+            width: 40%;
+        }
+    }
+}
+
+/* Filters container */
+#filters {
+    display: flex;
+    flex-direction: column; /* Stack filters vertically */
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px; /* Rounded corners */
+    border: 1px solid rgba(231, 52, 255, 0.2); /* Light border */
+    box-shadow: 0 4px 20px rgba(231, 52, 255, 0.2); /* Subtle shadow */
+    padding: 20px; /* Padding inside the filters container */
+    height: 100%;
+}
+
+.ranks {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px; /* Rounded corners */
+    border: 1px solid rgba(231, 52, 255, 0.2); /* Light border */
+    box-shadow: 0 4px 20px rgba(231, 52, 255, 0.2); /* Subtle shadow */
+    padding: 20px; /* Padding inside the filters container */
+    height: 100%;
+
+    &>div {
+        display: flex;
+        flex-direction: column; /* Stack filters vertically */
+        align-items: center;
+    }
+
+    h2{
+        font-family: "Montserrat", sans-serif;
+        font-size: 2rem;
+        color: #222222;
+    }
+    #main_rank_show, #advanced_rank_show {
+        font-family: "Varela Round", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #555455;
+        margin: 0px 0 0 0px;
+    }
+}
+
+/* Filter rows */
+.filter-row {
+    width: 100%; /* Full width of the container */
+    display: flex;
+    justify-content: space-between; /* Space between inputs in a row */
+    gap: 20px; /* Space between columns */
+    margin-bottom: 15px; /* Space between rows */
+}
+
+/* Filter groups */
+.filter-group {
+    flex: 1; /* Make inputs take equal space */
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+}
+
+/* Labels */
+.filter-group label {
+    font-weight: bold; /* Make labels bold */
+    margin-bottom: 5px; /* Space between label and input */
+    color: #333; /* Neutral text color */
+}
+
+/* Inputs and selects */
+.filter-group input,
+.filter-group select {
+    padding: 10px; /* Add padding inside inputs and selects */
+    font-size: 1rem; /* Consistent font size */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    outline: none; /* Remove default outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for border and shadow */
+}
+
+/* Focus effect for inputs and selects */
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: rgba(231, 52, 255, 0.632); /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(231, 52, 255, 0.2); /* Subtle glow effect */
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    .filter-row {
+        flex-direction: column; /* Stack inputs vertically on smaller screens */
+    }
+}
