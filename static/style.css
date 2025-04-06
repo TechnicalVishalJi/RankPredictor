@@ -9,14 +9,6 @@
     font-size: 16px;
 }
 
-
-/* body {
-    background-image: url("https://res.cloudinary.com/derp0chbp/image/upload/v1743737183/background_ikelzf.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: top;
-    overflow: hidden;
-} */
 body {
     margin: 0;
     padding: 0;
@@ -122,7 +114,7 @@ body {
         font-weight: 700;
         font-size: 1.2rem;
         padding: 10px 20px;
-        margin-bottom: 12px ;
+        margin-bottom: 15px ;
         border: none;
         border-radius: 5px;
         cursor: pointer;
@@ -356,7 +348,7 @@ body {
     border-radius: 15px; /* Rounded corners */
     border: 1px solid rgba(231, 52, 255, 0.2); /* Light border */
     box-shadow: 0 4px 20px rgba(231, 52, 255, 0.2); /* Subtle shadow */
-    padding: 20px; /* Padding inside the filters container */
+    padding: 20px;/* Padding inside the filters container */
     height: 100%;
 }
 
@@ -405,7 +397,7 @@ body {
     flex: 1; /* Make inputs take equal space */
     display: flex;
     flex-direction: column; /* Stack label and input vertically */
-}
+}   
 
 /* Labels */
 .filter-group label {
@@ -417,8 +409,9 @@ body {
 /* Inputs and selects */
 .filter-group input,
 .filter-group select {
-    padding: 10px; /* Add padding inside inputs and selects */
-    font-size: 1rem; /* Consistent font size */
+    padding: 5px; /* Add padding inside inputs and selects */
+    font-size: 0.8rem; /* Consistent font size */
+    margin-bottom: 0.2rem;
     border: 1px solid #ccc; /* Light border */
     border-radius: 8px; /* Rounded corners */
     outline: none; /* Remove default outline */
