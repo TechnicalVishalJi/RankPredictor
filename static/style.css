@@ -530,7 +530,10 @@ body {
 
     .about , .contact {
         height: calc(100vh - 100px);
-        font-size: "Varela Round", sans-serif;
+        
+        p, h1, h2, h3, li {
+            font-family: "Varela Round", sans-serif;
+        }
     }
     
     #navbar {
