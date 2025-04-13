@@ -71,9 +71,8 @@
 
                 <!-- <label for="message">Message:</label> -->
                 <textarea id="message" name="message" placeholder="Message" required></textarea><br>
-
-                <button type="submit">Send</button>
             </form>
+            <button id="submitButton" onclick="sendMessage()">Send</button>
         </div>
         <div class="college-predictor">
             <div class="intro" style="display: none;">
@@ -272,6 +271,7 @@
         let filteredResults = []; // Store filtered rows of data
         let currentIndex = 0; // Track the current index for pagination
         const rowsPerPage = 50; // Number of rows to load per click
+        const backendDomain = "https://v.ishal.ct.ws/"; // Backend domain
 
 
         function loadContent(section) {
@@ -293,6 +293,109 @@
                 contactSection.style.display = "block"; // Show contact content
             }
         }
+
+        function getCurrentDateTime() {
+            const options = {
+                timeZone: 'Asia/Calcutta',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+
+            const formatter = new Intl.DateTimeFormat('en-GB', options);
+            const parts = formatter.formatToParts(new Date());
+
+            const date = `${parts[0].value}-${parts[2].value}-${parts[4].value}`;
+            const time = `${parts[6].value}:${parts[8].value}:${parts[10].value} ${parts[12].value}`;
+
+            return `${date}, ${time}`;
+        }
+
+        // contact form send request
+        const sendMessage = async () => {
+            const emailData = {
+                uname: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                message: document.getElementById("message").value,
+                time: getCurrentDateTime(),
+                fromContactForm: true,
+            };
+
+            if(!emailData.uname || !emailData.email || !emailData.message) {
+                alert("Please fill all the fields.");
+                return;
+            }
+
+            emailData["message"] += "<br><br>" + "From : RankPredictorSite";
+            
+            try {
+                const button = document.querySelector(".contact button");
+                const wrappedSENDING = '<span class="letters">S</span><span class="letters">E</span><span class="letters">N</span><span class="letters">D</span><span class="letters">I</span><span class="letters">N</span><span class="letters">G</span><span class="letters">.</span><span class="letters">.</span><span class="letters">.</span>';
+                button.innerHTML = wrappedSENDING;
+                // animating the loading screen
+                gsap.fromTo(button.querySelectorAll(".letters"), {opacity: 0}, {
+                    opacity: 1,
+                    duration: 1,
+                    stagger: 0.15,
+                    repeat: -1,
+                });
+                
+                const response = await fetch(backendDomain + "api/send-email", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(emailData),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    const wrappedMessage = '<span class="letters">M</span><span class="letters">e</span><span class="letters">s</span><span class="letters">s</span><span class="letters">a</span><span class="letters">g</span><span class="letters">e</span><span class="letters"> </span><span class="letters">S</span><span class="letters">e</span><span class="letters">n</span><span class="letters">t</span><span class="letters">!</span>';
+                    button.innerHTML = wrappedMessage;
+                    button.style.backgroundColor = "#2ecc71";
+                    button.style.color = "white"
+                    button.style.borderColor = "#2ecc71";
+                    gsap.fromTo(button.querySelectorAll(".letters"), {opacity: 0},{
+                        duration: 1,
+                        opacity: 1,
+                        stagger: 0.15,
+                    })
+                    setTimeout(() => {
+                        button.innerHTML = "Send";
+                        button.style = '';
+                    }, 5000);
+                } else {
+                    const wrappedCantSend = '<span class="letters">C</span><span class="letters">a</span><span class="letters">n</span><span class="letters">\'</span><span class="letters">t</span><span class="letters"> </span><span class="letters">S</span><span class="letters">e</span><span class="letters">n</span><span class="letters">d</span><span class="letters">!</span>';
+                    button.innerHTML = wrappedCantSend;
+                    button.style.backgroundColor = "black";
+                    button.style.color = "white"
+                    button.style.borderColor = "black";
+                    gsap.fromTo(button.querySelectorAll(".letters"), {opacity: 0},{
+                        duration: 1,
+                        opacity: 1,
+                        stagger: 0.15,
+                    })
+                    setTimeout(() => {
+                        button.innerHTML = '<span class="letters">U</span><span class="letters">s</span><span class="letters">e</span><span class="letters"> </span><span class="letters">m</span><span class="letters">y</span><span class="letters"> </span><span class="letters">E</span><span class="letters">m</span><span class="letters">a</span><span class="letters">i</span><span class="letters">l</span><span class="letters">!</span>';
+                        gsap.fromTo(button.querySelectorAll(".letters"), {opacity: 0},{
+                        duration: 1,
+                        opacity: 1,
+                        stagger: 0.15,
+                        })
+                        setTimeout(() => {
+                        button.innerHTML = "Send";
+                        button.style = '';
+                        }, 5000);
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
 
         document.getElementById("predictForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent default form submission

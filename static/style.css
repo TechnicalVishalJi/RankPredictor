@@ -504,7 +504,7 @@ body {
     min-height: 120px;
 }
 
-#contactForm button {
+#submitButton {
     padding: 0.8rem 1.5rem;
     background: #8F87F1;
     color: white;
@@ -517,7 +517,7 @@ body {
     width: fit-content;
 }
 
-#contactForm button:hover {
+#submitButton:hover {
     background: #4a00e0;
     scale: 1.05;
 }
