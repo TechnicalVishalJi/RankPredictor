@@ -334,12 +334,12 @@
             .then(data => {
                 if(window.innerWidth <= 768){
                     gsap.to(".outer", { duration: 1.5, y:"-=110px",  width: "100vw", height:"100vh", ease: "power2.out" });
+                    document.querySelector(".outer").style.justifyContent="start"; // Show results section
                 }else{
                     gsap.to(".outer", { duration: 1.5,y: "-=155px", width: "100vw", height: "100vh", ease: "power2.out" });
                 }
                 document.getElementById("loading").style.display = "none"; // Hide loading message
 
-                document.querySelector(".outer").style.justifyContent="start"; // Show results section
 
                 // document.getElementById("results_2024").innerHTML = data.results_2024;
 

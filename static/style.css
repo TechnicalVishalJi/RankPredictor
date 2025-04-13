@@ -241,7 +241,7 @@ body {
     display: none;
     position: relative;
     margin: 0 20px;
-    height: 70vh;
+    height: 90vh;
 }
 
 #results2024Table {
@@ -583,6 +583,7 @@ body {
     #resultsPanel {
         width: 100vw;
         padding: 5%;
+        height: 100%;
     }
     
     #results {
