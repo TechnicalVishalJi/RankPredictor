@@ -530,7 +530,7 @@ body {
 
     .about , .contact {
         height: calc(100vh - 100px);
-        font-size: "Montserrat", sans-serif;
+        font-size: "Varela Round", sans-serif;
     }
     
     #navbar {
