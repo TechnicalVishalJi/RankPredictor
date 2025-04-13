@@ -525,16 +525,24 @@ body {
 
 @media screen and (max-width: 768px) {
     body{
-        overflow: hidden;
+        overflow: scroll;
+    }
+
+    .about , .contact {
+        height: calc(100vh - 100px);
     }
     
     #navbar {
         overflow: hidden;
-        margin: 10px 10px;
+        margin: 10px 10px !important;
         ul{
             gap: 0;
-            margin: 0;
+            margin: 10px 0;
         }
+    }
+
+    #navbar ul li a {
+        font-size: 1rem;
     }
     
     .intro {
@@ -552,7 +560,7 @@ body {
     .predictor {
         .outer{
             flex-direction: column;
-            justify-content: start;
+            justify-content: center;
             height: calc(100vh - 150px);
             overflow-y: scroll;
         }
