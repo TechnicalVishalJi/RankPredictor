@@ -440,7 +440,7 @@ body {
     border-radius: 20px;
     margin: 2rem auto !important;
     width: 95%;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Montserrat", sans-serif;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     color: #000;
 
@@ -549,7 +549,7 @@ body {
         margin: 0px 20px;
 
         .title{
-            font-size: 3rem;
+            font-size: 2.5rem;
         }
 
         .subtitle{
