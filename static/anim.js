@@ -21,8 +21,8 @@ document.getElementById("startPrediction").addEventListener("click", () => {
 
     // Hide the intro and animate the predictor
 
-    gsap.timeline()
-        .to(intro, {
+    let timeline = gsap.timeline();
+    timeline.to(intro, {
             duration: 0.5,
             // x: "45vw",
             // opacity: 0,
@@ -44,10 +44,22 @@ document.getElementById("startPrediction").addEventListener("click", () => {
             scale: 1,
             duration: 0.5,
             ease: "power2.out",
-        })
-        .to(predictor, {
+        });
+    if(!isMobileDevice()) {
+        timeline.to(predictor, {
             duration: 1,
             width: "80%",
             ease: "power4.out",
         });
+    }else{
+        timeline.to(predictor, {
+            duration: 1,
+            width: "90%",
+            ease: "power4.out",
+        });
+    }
 });
+
+function isMobileDevice() {
+    return window.innerWidth <= 768;
+}

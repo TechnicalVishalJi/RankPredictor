@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Predictor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- <link rel="stylesheet" href="../static/style.css"> -->
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
     <nav id="navbar">
         <ul>
             <li><a href="#" onclick="loadContent('home')">Home</a></li>
-            <li><a href="#" onclick="loadContent('about')">About US</a></li>
+            <li><a href="#" onclick="loadContent('about')">About Us</a></li>
             <li><a href="#" onclick="loadContent('contact')">Contact Us</a></li>
         </ul>
     </nav>
@@ -20,12 +20,45 @@
         <div class="about" style="display: none; margin: 1.5rem;">
             <h1>About Us</h1>
             <p>We believe that choosing the right college shouldn't be a guessing game.
-             </p><p>
-                That’s why we’ve built a powerful, easy-to-use platform that helps students 
-                predict their <br> chances of admission into top engineering colleges across India—based on 
-                their <br> JEE Main or JEE Advanced rank.<br>
-                <h1>Your rank. Your dream. Our guidance.</h1>
              </p>
+                <div class="about-content">
+                    <h2>Welcome to College Predictor</h2>
+                    <p>
+                        Your go-to platform for making informed decisions about your college admissions. Our mission is to help students navigate the complex admission process by providing accurate predictions based on their JEE ranks and category. Whether you're applying for the 2023 or 2024 academic year, our app uses advanced data models to give you a clear picture of the colleges that best match your profile.
+                    </p>
+
+                    <h3>Our Vision</h3>
+                    <p>
+                        We aim to empower students by offering data-driven insights that simplify the college selection process. With a growing number of educational institutions and complex admission criteria, we believe our app can provide clarity and guide students towards the best possible choices for their academic future.
+                    </p>
+
+                    <h3>How It Works</h3>
+                    <p>The College Predictor app analyzes key parameters such as:</p>
+                    <ul>
+                        <li>JEE Main Rank</li>
+                        <li>JEE Advanced Rank</li>
+                        <li>Category (OPEN, EWS, OBC-NCL, SC, ST)</li>
+                        <li>Gender</li>
+                        <li>Round of Counselling</li>
+                    </ul>
+                    <p>
+                        Using this data, our predictive models will recommend colleges that align with the applicant’s rank and category, ensuring a higher probability of admission.
+                    </p>
+
+                    <h3>Why Choose Us?</h3>
+                    <ul>
+                        <li><strong>Reliable Predictions:</strong> Our models are built on the latest data and historical trends, ensuring that the results are as accurate as possible.</li>
+                        <li><strong>Easy to Use:</strong> With a simple, user-friendly interface, you can get your predictions in just a few clicks.</li>
+                        <li><strong>Comprehensive Data:</strong> We provide detailed predictions for both 2023 and 2024 academic years, helping you plan ahead.</li>
+                        <li><strong>Free Access:</strong> We believe in making educational tools accessible to all. Our app is completely free to use!</li>
+                    </ul>
+
+                    <h3>Get in Touch</h3>
+                    <p>
+                        We value feedback and suggestions. If you have any questions or need assistance, feel free to reach out to us.
+                    </p>
+                </div>
+                <h1>Your rank. Your dream. Our guidance.</h1>
         </div>
         <div class="contact" style="display: none;">
             <p>If you have any questions, feel free to reach out!</p>
@@ -130,7 +163,7 @@
                         <button type="submit">Predict Colleges</button>
                     </form>
 
-                    <div id="resultsPanel" style="display: none; position: relative; margin: 0 20px; height: 90vh;">
+                    <div id="resultsPanel">
                         <img src="https://res.cloudinary.com/derp0chbp/image/upload/v1743756428/loadingfinal_k47eda.gif" id="loading" style="display:none;width: 0;height: 0;">
                     
                         <div class="top-row">
@@ -233,7 +266,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js" integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url_for('static', filename='anim.js') }}">
     </script>
-    <!-- <script src="../static/anim.js"></script> -->
+    <script src="../static/anim.js"></script>
     <script>
         let results = []; // Store all rows of data
         let filteredResults = []; // Store filtered rows of data
@@ -299,7 +332,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                gsap.to(".outer", { duration: 1.5,y: "-=155px", width: "100vw", height: "100vh", ease: "power2.out" });
+                if(window.innerWidth <= 768){
+                    gsap.to(".outer", { duration: 1.5, y:"-=90px",  width: "100vw", height:"100vh", ease: "power2.out" });
+                }else{
+                    gsap.to(".outer", { duration: 1.5,y: "-=155px", width: "100vw", height: "100vh", ease: "power2.out" });
+                }
                 document.getElementById("loading").style.display = "none"; // Hide loading message
 
                 // document.getElementById("results_2024").innerHTML = data.results_2024;

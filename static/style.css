@@ -18,7 +18,7 @@ body {
     background-size: cover;
     background-position: top;
     background-attachment: fixed; 
-    overflow-x: hidden; 
+    overflow: hidden; 
 }
 
 #navbar {
@@ -32,7 +32,7 @@ body {
 
 #navbar ul {
     background-color: rgba(255, 255, 255, 0.089);
-    border: 1px solid #e734ff2e;
+    border: 1px solid #8F87F12e;
     backdrop-filter: blur(20px);
     box-shadow: 3px 3px 10px rgba(252, 152, 252, 0.217);
     border-radius: 50px;
@@ -67,12 +67,12 @@ body {
     width: 0;
     height: 2.5px;
     border-radius: 50px;
-    background-color: #E734FF;
+    background-color: #8F87F1;
     transition: width 0.3s ease; /* Smooth transition */
 }
 
 #navbar ul li a:hover{
-    color: #E734FF; /* Change text color on hover */
+    color: #8F87F1; /* Change text color on hover */
     &::after {
         width: 100%; /* Expand underline on hover */
     }
@@ -95,7 +95,7 @@ body {
         font-family: "Varela Round", sans-serif;
         font-weight: 700;
         font-size: 1rem;
-        color: #E734FF;
+        color: #8F87F1;
         margin: 70px 0 30px 0px;
     }
 
@@ -108,7 +108,7 @@ body {
     }
 
     button {
-        background-color: #E734FF;
+        background-color: #8F87F1;
         color: white;
         font-family: "Varela Round", sans-serif;
         font-weight: 700;
@@ -121,8 +121,8 @@ body {
         transition: background-color 0.3s ease, transform 0.3s ease;
 
         &:hover {
-            background-color: #d62ce0;
-            transform: scale(1.05);
+            background-color: #C68EFD;
+            transform: scale(1.05) !important;
         }
     }
 }
@@ -171,7 +171,7 @@ body {
 
 /* Styling for form groups */
 #predictForm .form-group {
-    margin: 10px auto 10px;
+    margin: 10px auto;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -212,13 +212,13 @@ body {
 /* Focus effect for inputs and selects */
 #predictForm input:focus,
 #predictForm select:focus {
-    border-color: #E734FF;
+    border-color: #8F87F1;
     box-shadow: 0 0 8px rgba(231, 52, 255, 0.5);
 }
 
 /* Styling for the submit button */
 #predictForm button[type="submit"] {
-    background: #E734FF;
+    background: #8F87F1;
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
@@ -233,19 +233,15 @@ body {
 
 /* Hover effect for the submit button */
 #predictForm button[type="submit"]:hover {
-    background: #d62ce0;
+    background: #C68EFD;
     transform: scale(1.05);
 }
 
-/* Responsive styling for smaller screens */
-@media (max-width: 768px) {
-    #predictForm {
-        padding: 20px 25px;
-    }
-
-    #predictForm button[type="submit"] {
-        font-size: 0.9rem;
-    }
+#resultsPanel {
+    display: none;
+    position: relative;
+    margin: 0 20px;
+    height: 70vh;
 }
 
 #results2024Table {
@@ -259,7 +255,7 @@ body {
     }
 
     th {
-        background-color: #E734FF;
+        background-color: #8F87F1;
         color: white;
         font-family: "Montserrat", sans-serif;
         font-size: 1.2rem;
@@ -273,11 +269,11 @@ body {
     }
 
     tr:nth-child(even) {
-        background-color: rgba(231, 52, 255, 0.1);
+        background-color: hsla(245, 79%, 74%, 0.2);
     }
 
     tr:hover {
-        background-color: rgba(231, 52, 255, 0.2);
+        background-color: #c58efd4e;
         transition: background-color 0.3s ease;
     }
 
@@ -304,7 +300,7 @@ body {
         transform: translateX(-50%);
         transition: all 0.3s ease;
         padding: 10px;
-        background-color: #E734FF;
+        background-color: #8F87F1;
         color: white;
         font-family: "Varela Round", sans-serif;
         font-weight: 700;
@@ -314,7 +310,7 @@ body {
         box-shadow: 0 0 10px rgba(231, 52, 255, 0.5);
 
         &:hover {
-            background-color: #d62ce0;
+            background-color: #C68EFD;
             transform: scale(1.05) translateX(-50%);
         }
     }
@@ -425,27 +421,32 @@ body {
     box-shadow: 0 0 5px rgba(231, 52, 255, 0.2); /* Subtle glow effect */
 }
 
-/* Responsive styling for smaller screens */
-@media (max-width: 768px) {
-    .filter-row {
-        flex-direction: column; /* Stack inputs vertically on smaller screens */
-    }
-}
-
-
 
 /* changes */
 
+.about {
+    h1:first-of-type {
+        text-align: center;
+        font-size: 2.7rem;
+    }
+}
+
 .about, .contact {
+    height: calc(96vh - 125px) !important;
+    overflow-y: scroll !important;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(30px);
     padding: 2.5rem;
     border-radius: 20px;
-    margin: 2rem auto;
+    margin: 2rem auto !important;
     width: 95%;
     font-family: 'Segoe UI', sans-serif;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     color: #000;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .about h1, .contact h1 {
@@ -465,7 +466,7 @@ body {
 .about h1:last-of-type {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #5a189a;
+    color: #8F87F1;
     margin-top: 1.5rem;
 }
 
@@ -489,33 +490,121 @@ body {
     font-family: 'Segoe UI', sans-serif;
     width: 100%;
     background-color: #fdfdfd;
-    box-shadow: 4px 4px 5px rgba(128, 0, 128, 0.688);
+    box-shadow: 4px 4px 5px #9087f154;
+
+    &:focus {
+        outline: none;
+        border-color: #8F87F1;
+        box-shadow: 0 0 8px rgba(143, 135, 241, 0.5);
+    }
 }
 
 #contactForm textarea {
-    resize: vertical;
+    resize: none;
     min-height: 120px;
 }
 
 #contactForm button {
     padding: 0.8rem 1.5rem;
-    background: linear-gradient(135deg, #a4508b, #5f0a87);
+    background: #8F87F1;
     color: white;
     border: none;
     border-radius: 50px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
     width: fit-content;
 }
 
 #contactForm button:hover {
-    background: linear-gradient(135deg, #89216b, #4a00e0);
-}
-
-.subtitle{
-    margin: 1.2rem !important;
+    background: #4a00e0;
+    scale: 1.05;
 }
 
 
+@media screen and (max-width: 768px) {
+    body{
+        overflow: hidden;
+    }
+    
+    #navbar {
+        overflow: hidden;
+        margin: 10px 10px;
+        ul{
+            gap: 0;
+            margin: 0;
+        }
+    }
+    
+    .intro {
+        margin: 0px 20px;
+
+        .title{
+            font-size: 3rem;
+        }
+
+        .subtitle{
+            margin: 30px 0 10px;
+        }
+    }
+
+    .predictor {
+        .outer{
+            flex-direction: column;
+            justify-content: start;
+            height: calc(100vh - 150px);
+            overflow-y: scroll;
+        }
+    }
+    
+    #predictForm {
+        overflow-y: scroll !important;
+        justify-content: start;
+
+        .form-group, #advancedRankField {
+            flex-direction: column !important;
+            margin: 0 auto;
+        }
+
+        input, select {
+            width: calc(100vw - 10% - 70px - 25px) !important;
+        }
+    }
+
+    #resultsPanel {
+        width: 100vw;
+        padding: 5%;
+    }
+    
+    #results {
+        margin: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .top-row{
+        flex-direction: column-reverse;
+        height: auto;
+        gap: 10px;
+
+        &>div {
+            &:nth-child(1) {
+                width: 100%;
+            }
+            &:nth-child(2) {
+                width: 100%;
+            }
+        }
+    }
+
+    .filter-row {
+        flex-direction: column;
+        
+    }
+
+    #results_2024{
+        height: 70vh; 
+    }
+}
